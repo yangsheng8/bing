@@ -52,7 +52,7 @@ class BingBgDownloader(object):
         pix = entmp[entmp.rindex('_') + 1 : entmp.rindex('.')]
         
         img_name =  self._img_filename%(zh_name,en_name,ex_name)
-        return 'hello'
+        return img_name
 
     #得到图片资源的URL
     def _get_imgurl(self,img_info):
