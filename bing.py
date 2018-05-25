@@ -1,6 +1,37 @@
 '''
 Bing 壁纸爬虫
 '''
+
+'''
+{
+images: [
+{
+startdate: "20180524",
+fullstartdate: "201805241600",
+enddate: "20180525",
+url: "/az/hprichbg/rb/WineDay_ZH-CN9852912150_1920x1080.jpg",
+urlbase: "/az/hprichbg/rb/WineDay_ZH-CN9852912150",
+copyright: "皮利附近的葡萄庄园，瑞士沃州 (© Gallery Stock)",
+copyrightlink: "/search?q=%e8%91%a1%e8%90%84%e5%ba%84%e5%9b%ad&form=hpcapt&mkt=zh-cn",
+quiz: "/search?q=Bing+homepage+quiz&filters=WQOskey:%22HPQuiz_20180524_WineDay%22&FORM=HPQUIZ",
+wp: true,
+hsh: "aa330b5ea5dfb2b27cf629dc63e8a55f",
+drk: 1,
+top: 1,
+bot: 1,
+hs: [ ]
+}
+],
+tooltips: {
+loading: "正在加载...",
+previous: "上一个图像",
+next: "下一个图像",
+walle: "此图片不能下载用作壁纸。",
+walls: "下载今日美图。仅限用作桌面壁纸。"
+}
+}
+'''
+
 import urllib
 import urllib.request
 import ssl
@@ -10,7 +41,7 @@ import os.path
 
 class BingBgDownloader(object):
     _bing_interface = 'https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=%d&nc=%d&pid=hp'
-    _bing_url = 'https://cn.bing.com/'
+    _bing_url = 'https://cn.bing.com'
     _img_filename = '[%s%s][%s].%s'
     def __init__(self):
         super(BingBgDownloader,self).__init__()
@@ -47,20 +78,21 @@ class BingBgDownloader(object):
                 zh_name = img_info['copyright'][0:pos]
 
         entmp = img_info['url']
-        en_name = entmp[entmp.rindex('/') +1 :entmp.rindex('_ZH')]
-        ex_name = entmp[entmp.rindex('.') +1 : len(entmp)]
-        pix = entmp[entmp.rindex('_') + 1 : entmp.rindex('.')]
+        en_name = entmp[entmp.rindex('/') + 1 :entmp.rindex('_ZH')] #名字
+        ex_name = entmp[entmp.rindex('.') + 1 : len(entmp)] #拓展名
+        pix = entmp[entmp.rindex('_') + 1 : entmp.rindex('.')] #尺寸
         
-        img_name =  self._img_filename%(zh_name,en_name,ex_name)
+        img_name =  self._img_filename%(zh_name,en_name,pix,ex_name)
         return img_name
 
     #得到图片资源的URL
     def _get_imgurl(self,img_info):
-        return img_info['urlbase']
+        return img_info['url']
 
     #下载图片
     def _down_img(self,img_url,img_pathname):
-        img_data =  urllib.request.urlopen(img_url).read()
+        print("self._bing_url+img_url:----",self._bing_url+img_url)
+        img_data =  urllib.request.urlopen(self._bing_url+img_url).read()
         f =  open(img_pathname,'wb')
         f.write(img_data)
         f.close()
