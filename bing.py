@@ -100,5 +100,5 @@ class BingBgDownloader(object):
 
 if __name__ == '__main__':
     dl = BingBgDownloader()
-    dl.download(1)
+    dl.download(3)
    
